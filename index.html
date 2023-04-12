@@ -8,38 +8,61 @@
         <link rel="stylesheet" href="/css/style.css">
         <script src="https://kit.fontawesome.com/351d4a4a23.js" crossorigin="anonymous"></script>
         
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
         <!-- font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar sticky-top border-bottom border-secondary px-4">
-            <div class="container-fluid ">
+        <nav class="navbar sticky-top px-5">
+            <div id="nav" class="container-fluid ">
               <a class="navbar-brand text-white" href="#">
                 <i class="fa-solid fa-mask"></i>
                 Superhero Dashboard
               </a>
+
             </div>
         </nav>
 
-        <h1 class="text-secondary">Hello, world!</h1>
+        <!-- <h1 class="text-secondary">Hello, world!</h1> -->
         
-        <h2 class="text-secondary">Superhero Gender Distribution</h2>
         <div class="container">
           <div class="row">
             <div class="col-8">
+              <p class="text-white chart-name">The number of superheroes for each publisher</p>
               <div class="container-chart-l">
                 <div id="bar-chart"></div>
               </div>
             </div>
             <div class="col-4">
+              <p class="text-white chart-name">Superhero gender distribution</p>
               <div class="container-chart-m">
                 <div id="pie-chart"></div>
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <p class="text-white chart-name">The relationship between height and weight of superheroes and using color to represent the alignment</p>
+              <div class="container-chart-xl">
+                <div id="scatter-plot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row ">
+            <h2 class="">Dashboard design concept</h2>
+            <p class="text-white dis">ข้อมูลที่เลือกนำมาใช้ใน Dashboard นี้คือ (Name, Gender, Height, Publisher, Alignment, Weight) โดย Dashboard จะประกอบไปด้วย 3 ส่วน</p>
+            <p class="text-white dis">ส่วนแรก Bar chart โดยจะบอกถึงจำนวนตัวละครที่แต่ละ Publisher ได้ผลิต จะแสดงจำนวน Characters ในแกน Y ชื่อของ Publisher ในแกน X จากนั้นจะแสดงข้อมูลโดยการเรียงจากจำนวน Characters มากไปหาน้อย ทำให้เห็นถึงความแตกต่างอย่างชัดเจนระหว่าง Publisher</p>
+            <p class="text-white dis">ในส่วน Pie chart จะแสดงการกระจายของเพศ มีการนำ frequency มาคำนวณเป็น percent มีส่วนอธิบายข้อมูลอยู่ด้านล่างแผนภูมิ</p>
+            <p class="text-white dis">ในส่วน Scatter plot จะแสดงถึงความสัมพันธ์ส่วนสูง-น้ำหนัก และแบ่งกลุ่มโดยใช้สีแสดงถึง Alignment และ tooltip ในส่วนนี้เมื่อชี้ตำแหน่งใด ๆ กลุ่มของตำแหน่งนั้นจะถูกเน้น และกลุ่มอื่น ๆ จางลง ทำให้ผู้ใช้เห็นได้ง่ายขึ้นว่ากลุ่มใดถูกชี้อยู่ มีส่วนอธิบายข้อมูลที่บอกถึง Alignment</p>
+            <p class="text-white dis">ในเรื่องของการใช้สี ผู้จัดทำได้เลือกสีในส่วนของ d3.schemeSet2 ซึ่งเป็นสีที่ saturation ไม่สูงมากทำให้มองได้ง่ายใน dark mode และยังมีการแบ่งสีที่แตกต่างกัน</p>
+            <p class="dis" dir="auto"><a target="_blank" rel="noopener noreferrer nofollow" href="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/Set2.png"><img src="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/Set2.png" alt="Set2" style="max-width: 100%;" width="100%" height="40"></a></p>
+            <p class="text-white dis">การออกแบบโดยรวมของ dashboard เป็นการออกแบบในมีความสะอาดตา ทันสมัยเพราะมีการใช้ฟอนต์ Noto Sans Thai ที่เป็น Sans Serif การออกแบบ Container ให้มีมุมโค้งมน และการเลือก icon ที่เป็นหน้ากากทำให้ผู้ใช้นึกถึง Superhero</p>
+            <p class="" style="margin-bottom: 40px;"></p>
+          </div>
         </div>
+
         
         <!-- <script src = "https://d3js.org/d3.v4.min.js"></script> -->
         <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->

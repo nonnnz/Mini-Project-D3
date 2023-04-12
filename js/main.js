@@ -2,14 +2,18 @@ function roundnum(x) {
   return Math.ceil(x/400)*400;
 }
 
-// Set the dimensions and margins of the chart
+function roundnumx(x) {
+  return Math.ceil(x/1000)*1000;
+}
+
+
+// Create bar chart
 const barChart = {
     margin: { top: 20, right: 20, bottom: 130, left: 100 },
     width: 650,
     height: 400
   };
-  
-// Append the SVG object to the body of the page
+
 const svgBar = d3.select("#bar-chart")
   .append("svg")
   .attr("width", barChart.width + barChart.margin.left + barChart.margin.right)
@@ -38,7 +42,7 @@ svgBar.append("text")
   .text("Characters")
   .attr("fill", "white")
 
-// Create the pie chart SVG
+// Create pie chart
 const pieChart = {
   width: 300,
   height: 500,
@@ -61,6 +65,45 @@ svgPie.append("text")
   .attr("font-size", "20px")
   .attr("text-anchor", "middle")
   .text("Gender")
+  .attr("fill", "white")
+
+// Create scatter plot
+const scatterPlot = {
+  width: 800,
+  height: 400,
+  margin: {
+    top: 20,
+    right: 20,
+    bottom: 70,
+    left: 100
+  }
+};
+
+const svgScatter = d3.select("#scatter-plot").append("svg")
+  .attr("width", scatterPlot.width + scatterPlot.margin.left + scatterPlot.margin.right + 100)
+  .attr("height", scatterPlot.height + scatterPlot.margin.top + scatterPlot.margin.bottom + 50)
+  .append("g")
+  .attr("transform", "translate(" + scatterPlot.margin.left + "," + scatterPlot.margin.top + ")");
+
+// X label
+svgScatter.append("text")
+  .attr("class", "x axis-label")
+  .attr("x", scatterPlot.width / 2)
+  .attr("y", scatterPlot.height + 110)
+  .attr("font-size", "20px")
+  .attr("text-anchor", "middle")
+  .text("Weight (kg)")
+  .attr("fill", "white")
+
+// Y label
+svgScatter.append("text")
+  .attr("class", "y axis-label")
+  .attr("x", - (scatterPlot.height / 2))
+  .attr("y", -80)
+  .attr("font-size", "20px")
+  .attr("text-anchor", "middle")
+  .attr("transform", "rotate(-90)")
+  .text("Height (cm)")
   .attr("fill", "white")
 
 // Create tooltip
@@ -92,7 +135,7 @@ d3.csv("data/superhero_data_analysis.csv").then(data => {
     .range([barChart.height, 0])
     .domain([0, roundnum(d3.max(publisherData, d => d.frequency))]);
 
-  // Add the X and Y axes
+  // Add the X and Y
   svgBar.append("g")
     .attr("transform", "translate(0," + barChart.height + ")")
     .call(d3.axisBottom(xBar))
@@ -215,8 +258,6 @@ d3.csv("data/superhero_data_analysis.csv").then(data => {
   legend.append("circle")
   .attr("cx", 6)
   .attr("cy", 5)
-  // .attr("width", 20)
-  // .attr("height", 20)
   .attr("r", 6)
   .style("fill", d => colorPie(d.data.gender));
 
@@ -227,6 +268,109 @@ d3.csv("data/superhero_data_analysis.csv").then(data => {
   .text(d => d.data.gender)
   .attr("fill", "white");
 
+  // ---------------------- Chart 3: Scatter Plot ----------------------
+  // Filter out negative values 
+  const filteredData = data.filter(d => d.Height >= 0 && d.Weight >= 0);
 
+  // Set the X and Y scales
+  const xScatter = d3.scaleLinear()
+    .range([0, scatterPlot.width ])
+    .domain([0, roundnumx(d3.max(filteredData, d => d.Weight))]);
+
+  const yScatter = d3.scaleLinear()
+    .range([scatterPlot.height, 0])
+    .domain([0, roundnumx(d3.max(filteredData, d => d.Height))]);
+
+  // Add the X and Y 
+  svgScatter.append("g")
+    .attr("transform", "translate(0," + scatterPlot.height + ")")
+    .call(d3.axisBottom(xScatter))
+    .style('color', '#88898d')
+    .selectAll("text")
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end")
+    .attr("fill", "#f0f6fc");
+
+  svgScatter.append("g")
+    .call(d3.axisLeft(yScatter))
+    .style('color', '#88898d');
+
+  // set a color scale for the alignment categories
+  const colorScale = d3.scaleOrdinal()
+    .domain(["good", "bad", "neutral", "-"])
+    .range(d3.schemeSet2);
+
+  // Add the scatter plot points
+  svgScatter.selectAll("circle")
+    .data(filteredData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xScatter(d.Weight))
+    .attr("cy", d => yScatter(d.Height))
+    .attr("r", 5)
+    .attr("fill", d => colorScale(d.Alignment))
+    .style("opacity", 0.9)
+    .style("z-index", "1")
+    .on("mouseover", function(d, filteredData) {  // Add tooltip on mouseover
+      // console.log(filteredData);
+      d3.select(this)
+        .attr("r", 7)
+        .style("stroke", "#ffff")
+        .style("stroke-width", 2);
+      svgScatter.selectAll("circle")
+        .filter(function(e) {
+          return e.Alignment !== filteredData.Alignment && e !== filteredData.Alignment;
+        })
+        .style("opacity", 0.2);
+      // console.log(svgScatter.selectAll("circle").filter(function(e) {
+      //   return e.Alignment !== filteredData.Alignment && e !== filteredData.Alignment;
+      // }));
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+      tooltip
+        .html(
+          `<div>Name: ${filteredData.name}</div><div>Alignment: ${filteredData.Alignment}</div><div>Height: ${filteredData.Height} cm</div><div>Weight: ${filteredData.Weight} kg</div><div>Publisher: ${filteredData.Publisher}</div>`
+        )
+    })
+    .on('mousemove', function (event) {
+      tooltip
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 30) + "px");
+    })
+    .on("mouseout", function(d) {  // Remove tooltip on mouseout
+      d3.select(this)
+        .attr("r", 5)
+        .style("stroke-width", 0);
+      svgScatter.selectAll("circle")
+        .style("opacity", 0.9);
+      tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+    });
+
+  // Add the legend
+  const legend2 = svgScatter.selectAll(".legend")
+  .data(colorScale.domain())
+  .enter()
+  .append("g")
+  .attr("class", "legend")
+  .attr("transform", function(d, i) { return "translate("+ (scatterPlot.width) + "," + i * 20 + ")"; });
+
+  // console.log(colorScale.domain());
+  // Add colored squares to legend
+  legend2.append("circle")
+  .attr("cx", 6)
+  .attr("cy", 5)
+  .attr("r", 6)
+  .style("fill", d => colorScale(d));
+
+  // Add legend text
+  legend2.append("text")
+  .attr("x", 24)
+  .attr("y", 9)
+  .style("font-size", "14px")
+  .text(d => d)
+  .attr("fill", "white");
 
 });

@@ -17,6 +17,17 @@
     background-color: var(--color-secondary);
   }
 
+  h2 {
+    color: white;
+    padding-top: 40px;
+  }
+
+  p {
+    color: white;
+    margin: initial;
+  }
+
+
 .tooltip {
   position: absolute;
   pointer-events: none;
@@ -29,7 +40,7 @@
 
 .container-chart-m {
   margin: auto;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   padding: 20px;
   border: 2px solid #0000;
   border-radius: 15px;
@@ -44,7 +55,7 @@
 
 .container-chart-l {
   margin: auto;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   padding: 20px;
   border: 2px solid #0000;
 
@@ -56,4 +67,32 @@
   background: rgb(15,19,25);
   background: linear-gradient(145deg, rgba(15,19,25,1) 0%, rgba(32,41,54,1) 64%, rgba(49,40,84,1) 100%)padding-box,
     linear-gradient(145deg, #9bf0ea,#8a74c4) border-box;
+}
+
+.container-chart-xl {
+  margin: auto;
+  /* margin-top: 40px; */
+  padding: 20px;
+  border: 2px solid #0000;
+
+  border-radius: 15px;
+  text-align: center;
+  justify-content: center;
+  width: 1280px;
+  height: 580px;
+  background: rgb(15,19,25);
+  background: linear-gradient(145deg, rgba(15,19,25,1) 0%, rgba(32,41,54,1) 64%, rgba(49,40,84,1) 100%)padding-box,
+    linear-gradient(145deg, #9bf0ea,#8a74c4) border-box;
+}
+
+.chart-name {
+  margin-top: 30px;
+  padding-left: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dis {
+  text-indent: 40px;
+  margin-bottom: 10px;
 }
